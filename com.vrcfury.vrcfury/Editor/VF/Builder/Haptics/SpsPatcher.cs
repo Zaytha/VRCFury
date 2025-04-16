@@ -357,9 +357,8 @@ namespace VF.Builder.Haptics {
                 newInputParams = rewrittenInputParams.rewritten;
                 oldStructType = rewrittenInputParams.firstParamType;
                 mainParamName = rewrittenInputParams.firstParamName;
-                var firstParamType = rewrittenInputParams.firstParamType;
                 var rewrittenPassParams = RewriteParamList(paramList, stripTypes: true,
-                    rewriteFirstParamNameTo: $"({firstParamType}){mainParamName}");
+                    rewriteFirstParamNameTo: $"({oldStructType}){mainParamName}");
                 newPassParams = rewrittenPassParams.rewritten;
             } else {
                 oldStructType = "appdata_full";
@@ -414,7 +413,9 @@ namespace VF.Builder.Haptics {
             newBody.Add($"struct SpsInputs{extends} {{");
             newBody.AddRange(newStructBody);
             newBody.Add("};");
-            
+
+            newBody.Add("#define SPS_VANILLA_VERT_PARAM_TYPE " + oldStructType);
+
             newBody.Add(spsMain);
 
             newBody.Add($"{returnType} {newVertFunction}({newInputParams}) {{");
